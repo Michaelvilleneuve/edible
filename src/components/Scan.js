@@ -1,21 +1,55 @@
 import React, { Component } from 'react';
-import { View, Text } from 'native-base';
+import { Actions, ActionConst } from 'react-native-router-flux';
+import { Alert, Text, Dimensions } from 'react-native';
+import { connect } from 'react-redux';
+import { View } from 'native-base';
+import Camera from 'react-native-camera';
+import {} from '../actions';
 
-export default class Main extends Component {
+export default class Scan extends Component {
+
+  barCodeRead(e) {
+    console.log(e);
+    Actions.result({ code: e });
+  }
+
+
   render() {
-    return (
-      <View>
-        <Text>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-          do eiusmod tempor incididunt ut labore
-          et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut 
-          aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-          voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
-           sint occaecat cupidatat non proident, sunt in culpa
-           qui officia deserunt mollit anim id est laborum.
-        </Text>
-      </View>
-    );
+      return (
+        <View style={s.container}>
+          <Camera
+            ref={(cam) => {
+              this.camera = cam;
+            }}
+            onBarCodeRead={this.barCodeRead.bind(this)}
+            style={{ flex: 1 }}
+          />
+          <View style={s.logoContainer}>
+            <Text style={s.logo}>Edible</Text>
+          </View>
+        </View>
+      );
   }
 }
+
+const s = {
+  container: {
+    flex: 1,
+  },
+  logoContainer: {
+    position: 'absolute',
+    top: 20,
+    height: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    width: Dimensions.get('window').width,
+  },
+  logo: {
+    color: '#50BEE2',
+    fontSize: 50,
+    fontWeight: '100',
+    flex: 1,
+    backgroundColor: 'transparent'
+  }
+};
